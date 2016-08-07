@@ -53,14 +53,14 @@ class CommentModel extends ActiveRecord
     public function rules()
     {
         return [
-            [['entity', 'entityId'], 'required'],
+            [['entity', 'entityId', 'is_private'], 'required'],
             ['content', 'required', 'message' => Yii::t('yii2mod.comments', 'Comment cannot be blank.')],
             [['content', 'entity', 'relatedTo'], 'string'],
             ['status', 'default', 'value' => CommentStatus::ACTIVE],
             ['status', 'in', 'range' => [CommentStatus::ACTIVE, CommentStatus::DELETED]],
             ['level', 'default', 'value' => 1],
             ['parentId', 'validateParentID'],
-            [['entityId', 'parentId', 'createdBy', 'updatedBy', 'status', 'createdAt', 'updatedAt', 'level'], 'integer'],
+            [['entityId', 'parentId', 'createdBy', 'updatedBy', 'status', 'createdAt', 'updatedAt', 'level', 'is_private'], 'integer'],
         ];
     }
 
@@ -382,5 +382,18 @@ class CommentModel extends ActiveRecord
         }
 
         return $query->count();
+    }
+
+
+    public function hideComment($comment_created_by, $project_created_by) 
+    {
+        $current_user_id = Yii::$app->user->id;
+        if($project_created_by == $current_user_id) {
+            return true;
+        } else if($comment_created_by == $current_user_id){
+            return true;
+        } else {
+            return false;
+        }
     }
 }

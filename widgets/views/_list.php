@@ -7,9 +7,19 @@ use yii\helpers\Url;
 /* @var $comment \yii2mod\comments\models\CommentModel */
 /* @var $comments array */
 /* @var $maxLevel null|integer comments max level */
+
+// echo "<pre>";
+// print_r($project_created_by);
+//$project_created_by = $modelProject->user_id;
+
 ?>
 <?php if (!empty($comments)) : ?>
     <?php foreach ($comments as $comment) : ?>
+
+        <?php if( ($comment->is_private) && !$comment->hideComment($comment->createdBy, $modelProject->user_id) ): ?>
+       
+        <?php else: ?>
+
         <li class="comment" id="comment-<?php echo $comment->id ?>" itemscope itemtype="http://schema.org/Comment">
             <div class="comment-content" data-comment-content-id="<?php echo $comment->id ?>">
                 <div class="comment-author-avatar">
@@ -41,9 +51,12 @@ use yii\helpers\Url;
             </div>
             <?php if ($comment->hasChildren()): ?>
                 <ul class="children">
-                    <?php echo $this->render('_list', ['comments' => $comment->children, 'maxLevel' => $maxLevel]) ?>
+                    <?php echo $this->render('_list', ['comments' => $comment->children, 'maxLevel' => $maxLevel, 'modelProject' => $modelProject]) ?>
                 </ul>
             <?php endif; ?>
         </li>
+
+        <?php endif; ?>
+
     <?php endforeach; ?>
 <?php endif; ?>

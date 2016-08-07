@@ -21,6 +21,9 @@ use yii\widgets\ActiveForm;
     ]); ?>
 
     <?php echo $form->field($commentModel, 'content', ['template' => '{input}{error}'])->textarea(['placeholder' => Yii::t('yii2mod.comments', 'Add a comment...'), 'rows' => 4, 'data' => ['comment' => 'content']]) ?>
+    <?php $commentModel->is_private = ($commentModel->is_private) ? 0 : 1 ?>
+    <?= $form->field($commentModel, 'is_private')->radioList([1 =>'Public', 0 => 'Private'])->label(false) ?>
+
     <?php echo $form->field($commentModel, 'parentId', ['template' => '{input}'])->hiddenInput(['data' => ['comment' => 'parent-id']]); ?>
     <div class="comment-box-partial">
         <div class="button-container show">

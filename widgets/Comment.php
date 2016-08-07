@@ -124,6 +124,7 @@ class Comment extends Widget
         $comments = $commentModelClass::getTree($this->entity, $this->entityId, $this->maxLevel, $this->showDeletedComments);
 
         return $this->render($this->commentView, [
+            'modelProject' => $this->model,
             'comments' => $comments,
             'commentModel' => $commentModel,
             'maxLevel' => $this->maxLevel,
